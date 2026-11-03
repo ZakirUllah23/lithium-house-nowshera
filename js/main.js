@@ -440,6 +440,7 @@ function bootLithiumHouse() {
   initProjectsShowcaseSlider();
   initWhatsAppLinks();
   initNavigation();
+  initProductNavStrip();
   initBrandSlider();
   initProjectsSlider();
   initReviewsSlider();
@@ -684,5 +685,139 @@ function initCardScrollAnimations() {
   } else {
     // Fallback if IntersectionObserver is unsupported
     cards.forEach((card) => card.classList.add("card-revealed"));
+  }
+}
+
+/**
+ * ============================================================================
+ * Product Catalogue Sticky Category Navigation Strip Controller
+ * - Eliminates gap: Dynamically syncs --site-header-height with rendered header
+ * - Auto-hides on scroll down, reveals immediately when scrolling back up
+ * - Stays visible when at the top of the page (before passing into sticky mode)
+ * - Smoothly navigates & maintains visibility when category jumps are clicked
+ * - Highlights active category pill via IntersectionObserver scroll spy
+ * ============================================================================
+ */
+function initProductNavStrip() {
+  const strip = document.querySelector(".products-nav-strip");
+  const header = document.querySelector(".site-header");
+  if (!strip) return;
+
+  // Dynamically calculate and sync exact site header height to eliminate any gap
+  const syncHeaderHeight = () => {
+    if (header) {
+      const h = header.offsetHeight || header.getBoundingClientRect().height;
+      if (h > 0) {
+        document.documentElement.style.setProperty("--site-header-height", `${Math.round(h)}px`);
+      }
+    }
+  };
+
+  syncHeaderHeight();
+  window.addEventListener("resize", syncHeaderHeight, { passive: true });
+
+  let lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+  let ticking = false;
+  let isClickScrolling = false;
+  let clickTimeout = null;
+
+  // Track initial offset position of strip relative to document
+  const getStripInitialTop = () => {
+    const rect = strip.getBoundingClientRect();
+    return rect.top + (window.pageYOffset || document.documentElement.scrollTop);
+  };
+  let initialStripTop = getStripInitialTop();
+  window.addEventListener("resize", () => {
+    initialStripTop = getStripInitialTop();
+  }, { passive: true });
+
+  // Handle category link clicks
+  const navBtns = strip.querySelectorAll(".products-nav-btn");
+  navBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      navBtns.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      // Keep strip visible during programmatic smooth scroll
+      strip.classList.remove("is-hidden");
+      isClickScrolling = true;
+      if (clickTimeout) clearTimeout(clickTimeout);
+      clickTimeout = setTimeout(() => {
+        isClickScrolling = false;
+        lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
+      }, 750);
+    });
+  });
+
+  // Scroll handler: hide on scroll down, show when scrolling back up
+  const onScroll = () => {
+    const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
+    const headerHeight = header ? (header.offsetHeight || 59) : 59;
+    const scrollDiff = currentScrollY - lastScrollY;
+
+    if (isClickScrolling) {
+      strip.classList.remove("is-hidden");
+      lastScrollY = currentScrollY;
+      ticking = false;
+      return;
+    }
+
+    // When near top (above sticky engagement point), keep strip in place
+    if (currentScrollY <= initialStripTop - headerHeight + 5) {
+      strip.classList.remove("is-hidden");
+    } else {
+      // User is scrolling DOWN -> hide the category jump strip
+      if (scrollDiff > 6) {
+        strip.classList.add("is-hidden");
+      }
+      // User is scrolling UP ("going back") -> show the category jump strip
+      else if (scrollDiff < -6) {
+        strip.classList.remove("is-hidden");
+      }
+    }
+
+    lastScrollY = currentScrollY;
+    ticking = false;
+  };
+
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      window.requestAnimationFrame(onScroll);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // IntersectionObserver scroll spy to keep the active category button updated
+  const sections = [
+    document.getElementById("batteries"),
+    document.getElementById("inverters"),
+    document.getElementById("panels")
+  ].filter(Boolean);
+
+  if (sections.length > 0 && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (isClickScrolling) return;
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute("id");
+            navBtns.forEach((btn) => {
+              const href = btn.getAttribute("href");
+              if (href === `#${id}`) {
+                btn.classList.add("active");
+              } else {
+                btn.classList.remove("active");
+              }
+            });
+          }
+        });
+      },
+      {
+        rootMargin: "-25% 0px -50% 0px",
+        threshold: 0.05
+      }
+    );
+
+    sections.forEach((sec) => observer.observe(sec));
   }
 }
