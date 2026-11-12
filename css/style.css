@@ -4835,3 +4835,182 @@ h1, h2, h3, h4, h5, h6 {
     animation: none !important;
   }
 }
+
+
+/* ========================================================
+   Products Page: Featured E-Charge Battery Card (Green & White Theme)
+   ======================================================== */
+.product-card.product-card-echarge,
+.product-card.product-card-own-brand {
+  position: relative !important;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F0FDF4 100%) !important;
+  border: 2px solid #16A34A !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: 0 8px 24px -4px rgba(22, 101, 52, 0.16), 0 0 0 1px rgba(34, 197, 94, 0.25) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast) !important;
+}
+
+.product-card.product-card-echarge:hover,
+.product-card.product-card-own-brand:hover {
+  transform: translateY(-6px) !important;
+  border-color: #15803D !important;
+  box-shadow: 0 16px 36px -6px rgba(22, 101, 52, 0.24), 0 0 0 2px #22C55E !important;
+}
+
+/* Prominent Top Badge */
+.echarge-origin-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, #14532D 0%, #166534 100%);
+  color: #DCFCE7;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.45rem 0.75rem;
+  border-bottom: 1px solid rgba(34, 197, 94, 0.35);
+  text-align: center;
+}
+
+.echarge-origin-badge .echarge-badge-icon {
+  color: #FCD34D;
+  font-size: 0.85rem;
+}
+
+/* Image Wrapper & Brand Tag */
+.product-card.product-card-echarge .product-card-img-wrapper,
+.product-card.product-card-own-brand .product-card-img-wrapper {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  background-color: #ECFDF5;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.product-card.product-card-echarge .product-brand-tag.echarge-brand-tag,
+.product-card.product-card-own-brand .product-brand-tag.echarge-brand-tag {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  background-color: #14532D;
+  color: #86EFAC;
+  border: 1px solid #22C55E;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+}
+
+/* Card Body & Title */
+.product-card.product-card-echarge .product-card-body,
+.product-card.product-card-own-brand .product-card-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.product-card.product-card-echarge .product-card-model,
+.product-card.product-card-own-brand .product-card-model {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 0.25rem;
+}
+
+.echarge-tagline {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #166534;
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Key USPs Grid */
+.echarge-usps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  background-color: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.echarge-usp-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+  font-size: 0.775rem;
+  line-height: 1.35;
+  color: #1E293B;
+}
+
+.echarge-usp-item .usp-icon {
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  color: #16A34A;
+  margin-top: 1px;
+}
+
+.echarge-usp-item strong {
+  color: #0F172A;
+}
+
+.product-card.product-card-echarge .product-card-desc,
+.product-card.product-card-own-brand .product-card-desc {
+  font-size: 0.875rem;
+  color: #475569;
+  line-height: 1.55;
+  margin-bottom: 1.25rem;
+  flex-grow: 1;
+}
+
+/* Footer & CTA */
+.product-card.product-card-echarge .product-card-footer,
+.product-card.product-card-own-brand .product-card-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid #DCFCE7;
+}
+
+.product-card.product-card-echarge .echarge-cta-btn,
+.product-card.product-card-own-brand .echarge-cta-btn {
+  background: linear-gradient(135deg, #166534 0%, #15803D 100%) !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  border: 1px solid #16A34A !important;
+  box-shadow: 0 2px 8px rgba(22, 101, 52, 0.25) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.45rem !important;
+  transition: all var(--transition-fast) !important;
+}
+
+.product-card.product-card-echarge .echarge-cta-btn:hover,
+.product-card.product-card-own-brand .echarge-cta-btn:hover {
+  background: #14532D !important;
+  border-color: #14532D !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 14px rgba(22, 101, 52, 0.35) !important;
+}
+
+@media (max-width: 480px) {
+  .echarge-usps-grid {
+    grid-template-columns: 1fr;
+  }
+}
