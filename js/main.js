@@ -440,7 +440,7 @@ function bootLithiumHouse() {
   initProjectsShowcaseSlider();
   initWhatsAppLinks();
   initNavigation();
-  initProductNavStrip();
+  initScrollNavigation();
   initBrandSlider();
   initProjectsSlider();
   initReviewsSlider();
@@ -690,20 +690,20 @@ function initCardScrollAnimations() {
 
 /**
  * ============================================================================
- * Product Catalogue Sticky Category Navigation Strip Controller
- * - Eliminates gap: Dynamically syncs --site-header-height with rendered header
- * - Auto-hides on scroll down, reveals immediately when scrolling back up
- * - Stays visible when at the top of the page (before passing into sticky mode)
- * - Smoothly navigates & maintains visibility when category jumps are clicked
- * - Highlights active category pill via IntersectionObserver scroll spy
+ * Global Scroll Navigation & Sticky Category Strip Controller
+ * - Header: Disappears naturally on scroll down; reveals immediately on scroll up
+ * - Category Strips (Products & Packages):
+ *   - Sticky at top: 0 during downward scroll (locked at viewport top)
+ *   - When header reveals on scroll up, transitions to top: headerHeight (no overlap)
+ * - ScrollSpy for Products page (4 categories) and Packages page (5 categories)
+ * - Retains full keyboard accessibility and mobile drawer responsiveness
  * ============================================================================
  */
-function initProductNavStrip() {
-  const strip = document.querySelector(".products-nav-strip");
+function initScrollNavigation() {
   const header = document.querySelector(".site-header");
-  if (!strip) return;
+  const navMenu = document.querySelector(".nav-menu");
 
-  // Dynamically calculate and sync exact site header height to eliminate any gap
+  // Dynamically sync header height CSS variable
   const syncHeaderHeight = () => {
     if (header) {
       const h = header.offsetHeight || header.getBoundingClientRect().height;
@@ -712,7 +712,6 @@ function initProductNavStrip() {
       }
     }
   };
-
   syncHeaderHeight();
   window.addEventListener("resize", syncHeaderHeight, { passive: true });
 
@@ -721,58 +720,39 @@ function initProductNavStrip() {
   let isClickScrolling = false;
   let clickTimeout = null;
 
-  // Track initial offset position of strip relative to document
-  const getStripInitialTop = () => {
-    const rect = strip.getBoundingClientRect();
-    return rect.top + (window.pageYOffset || document.documentElement.scrollTop);
-  };
-  let initialStripTop = getStripInitialTop();
-  window.addEventListener("resize", () => {
-    initialStripTop = getStripInitialTop();
-  }, { passive: true });
+  const getHeaderHeight = () => (header ? (header.offsetHeight || 58) : 58);
+  const revealThreshold = 100; // Threshold before scroll-up reveal activates
 
-  // Handle category link clicks
-  const navBtns = strip.querySelectorAll(".products-nav-btn");
-  navBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      navBtns.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      // Keep strip visible during programmatic smooth scroll
-      strip.classList.remove("is-hidden");
-      isClickScrolling = true;
-      if (clickTimeout) clearTimeout(clickTimeout);
-      clickTimeout = setTimeout(() => {
-        isClickScrolling = false;
-        lastScrollY = window.pageYOffset || document.documentElement.scrollTop;
-      }, 750);
-    });
-  });
-
-  // Scroll handler: hide on scroll down, show when scrolling back up
   const onScroll = () => {
     const currentScrollY = window.pageYOffset || document.documentElement.scrollTop;
-    const headerHeight = header ? (header.offsetHeight || 59) : 59;
     const scrollDiff = currentScrollY - lastScrollY;
 
-    if (isClickScrolling) {
-      strip.classList.remove("is-hidden");
-      lastScrollY = currentScrollY;
-      ticking = false;
-      return;
-    }
+    // Do not alter header if mobile drawer menu is currently open
+    const isMobileMenuOpen = navMenu && navMenu.classList.contains("is-open");
 
-    // When near top (above sticky engagement point), keep strip in place
-    if (currentScrollY <= initialStripTop - headerHeight + 5) {
-      strip.classList.remove("is-hidden");
-    } else {
-      // User is scrolling DOWN -> hide the category jump strip
-      if (scrollDiff > 6) {
-        strip.classList.add("is-hidden");
-      }
-      // User is scrolling UP ("going back") -> show the category jump strip
-      else if (scrollDiff < -6) {
-        strip.classList.remove("is-hidden");
+    if (header && !isMobileMenuOpen) {
+      if (currentScrollY <= 15) {
+        // At the very top: return header to natural relative flow
+        header.classList.remove("header-revealed", "header-hiding");
+        document.body.classList.remove("header-is-revealed");
+      } else if (currentScrollY > revealThreshold) {
+        if (scrollDiff < -6) {
+          // Scrolling UP -> reveal header smoothly
+          header.classList.add("header-revealed");
+          header.classList.remove("header-hiding");
+          document.body.classList.add("header-is-revealed");
+        } else if (scrollDiff > 6) {
+          // Scrolling DOWN -> hide header
+          if (header.classList.contains("header-revealed")) {
+            header.classList.remove("header-revealed");
+            header.classList.add("header-hiding");
+          }
+          document.body.classList.remove("header-is-revealed");
+        }
+      } else if (scrollDiff > 6) {
+        // Scrolling DOWN early in page
+        header.classList.remove("header-revealed");
+        document.body.classList.remove("header-is-revealed");
       }
     }
 
@@ -787,37 +767,70 @@ function initProductNavStrip() {
     }
   }, { passive: true });
 
-  // IntersectionObserver scroll spy to keep the active category button updated
-  const sections = [
-    document.getElementById("batteries"),
-    document.getElementById("inverters"),
-    document.getElementById("panels")
-  ].filter(Boolean);
-
-  if (sections.length > 0 && "IntersectionObserver" in window) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (isClickScrolling) return;
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const id = entry.target.getAttribute("id");
-            navBtns.forEach((btn) => {
-              const href = btn.getAttribute("href");
-              if (href === `#${id}`) {
-                btn.classList.add("active");
-              } else {
-                btn.classList.remove("active");
-              }
-            });
-          }
-        });
-      },
-      {
-        rootMargin: "-25% 0px -50% 0px",
-        threshold: 0.05
-      }
-    );
-
-    sections.forEach((sec) => observer.observe(sec));
+  // Full Keyboard Accessibility: reveal header when tabbing into it
+  if (header) {
+    header.addEventListener("focusin", () => {
+      header.classList.add("header-revealed");
+      header.classList.remove("header-hiding");
+      document.body.classList.add("header-is-revealed");
+    });
   }
+
+  // Handle Category Jumps & ScrollSpy for Products & Packages pages
+  const categoryStrips = document.querySelectorAll(".products-nav-strip");
+  categoryStrips.forEach((strip) => {
+    const navBtns = strip.querySelectorAll(".products-nav-btn");
+
+    navBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        navBtns.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        isClickScrolling = true;
+        if (clickTimeout) clearTimeout(clickTimeout);
+        clickTimeout = setTimeout(() => {
+          isClickScrolling = false;
+        }, 850);
+      });
+    });
+
+    // Extract section targets from button hrefs
+    const sectionIds = Array.from(navBtns)
+      .map((b) => {
+        const href = b.getAttribute("href");
+        return href && href.startsWith("#") ? href.slice(1) : null;
+      })
+      .filter(Boolean);
+
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
+
+    if (sections.length > 0 && "IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (isClickScrolling) return;
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const id = entry.target.getAttribute("id");
+              navBtns.forEach((btn) => {
+                const href = btn.getAttribute("href");
+                if (href === `#${id}`) {
+                  btn.classList.add("active");
+                } else {
+                  btn.classList.remove("active");
+                }
+              });
+            }
+          });
+        },
+        {
+          rootMargin: "-15% 0px -60% 0px",
+          threshold: 0.05
+        }
+      );
+
+      sections.forEach((sec) => observer.observe(sec));
+    }
+  });
 }
