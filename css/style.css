@@ -4059,45 +4059,58 @@ body.header-is-revealed .products-nav-strip,
  * 4. Crisp Map container
  * ============================================================================ */
 
-/* 1. Founder Image Sizing & Layout */
+/* 1. Founder / Leadership Profile Card & Image Layout */
 .founder-section {
-  background-color: var(--color-white);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  max-width: 980px;
-  margin: 0 auto;
+  background-color: var(--color-white) !important;
+  border: 1.5px solid rgba(22, 163, 74, 0.22) !important; /* Subtle, sophisticated brand green border */
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05), 0 0 0 1px rgba(37, 99, 235, 0.06) !important;
+  max-width: 1000px !important;
+  margin: 0 auto !important;
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal) !important;
+}
+
+.founder-section:hover {
+  border-color: rgba(22, 163, 74, 0.38) !important;
+  box-shadow: 0 16px 36px -6px rgba(15, 23, 42, 0.09), 0 0 0 1px rgba(22, 163, 74, 0.18) !important;
 }
 
 .founder-grid {
   display: grid !important;
-  grid-template-columns: 340px 1fr !important; /* Smaller, balanced image column */
-  align-items: stretch !important;
+  grid-template-columns: 360px 1fr !important;
+  align-items: center !important;
 }
 
 .founder-media {
-  background-color: #0F172A !important;
+  padding: 2.25rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(145deg, #F8FAFC 0%, #EEF2F6 100%) !important;
   height: 100% !important;
-  min-height: 320px !important;
-  max-height: 420px !important;
-  overflow: hidden !important;
+  border-right: 1px solid rgba(226, 232, 240, 0.8) !important;
 }
 
 .founder-media img {
   width: 100% !important;
-  height: 100% !important;
+  max-width: 290px !important;
+  aspect-ratio: 4 / 5 !important;
   object-fit: cover !important;
   object-position: center top !important;
-  transition: transform 0.6s ease;
+  border-radius: 16px !important; /* Clean, modern border-radius */
+  border: 1.5px solid rgba(22, 163, 74, 0.2) !important;
+  box-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(15, 23, 42, 0.05) !important;
+  transition: transform 0.4s ease, box-shadow 0.4s ease !important;
 }
 
 .founder-section:hover .founder-media img {
-  transform: scale(1.03);
+  transform: translateY(-2px) scale(1.01) !important;
+  box-shadow: 0 18px 36px -6px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(22, 163, 74, 0.3) !important;
 }
 
 .founder-content {
-  padding: 2.25rem 2.5rem !important;
+  padding: 2.5rem 3rem 2.5rem 2.75rem !important;
   display: flex !important;
   flex-direction: column !important;
   justify-content: center !important;
@@ -4105,52 +4118,63 @@ body.header-is-revealed .products-nav-strip,
 
 .founder-name {
   font-family: var(--font-heading) !important;
-  font-size: 1.5rem !important;
+  font-size: 1.65rem !important;
   font-weight: 800 !important;
-  color: var(--color-deep-charcoal) !important;
+  color: #0F172A !important;
   margin-bottom: 0.25rem !important;
+  letter-spacing: -0.01em !important;
 }
 
 .founder-role {
-  color: var(--color-brand-green) !important;
+  color: #16A34A !important;
   font-size: 0.95rem !important;
   font-weight: 700 !important;
   margin-bottom: 1.25rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
 }
 
 .founder-message {
   font-size: 0.95rem !important;
-  line-height: 1.65 !important;
+  line-height: 1.7 !important;
   color: #334155 !important;
-  margin-bottom: 1rem !important;
+  margin-bottom: 1.15rem !important;
 }
 
 .founder-quote {
   font-style: italic !important;
-  font-size: 0.9rem !important;
-  line-height: 1.6 !important;
-  color: var(--color-brand-green) !important;
-  border-left: 3px solid var(--color-accent-green) !important;
-  padding-left: 1rem !important;
-  background-color: var(--color-light-bg) !important;
-  padding: 0.75rem 1rem !important;
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0 !important;
+  font-size: 0.92rem !important;
+  line-height: 1.65 !important;
+  color: #1E293B !important;
+  border-left: 3.5px solid #16A34A !important;
+  padding: 0.85rem 1.15rem !important;
+  background-color: #F8FAFC !important;
+  border-top: 1px solid #E2E8F0 !important;
+  border-right: 1px solid #E2E8F0 !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+  border-radius: 0 12px 12px 0 !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 860px) {
   .founder-grid {
     grid-template-columns: 1fr !important;
   }
   .founder-media {
-    max-height: 280px !important;
-    min-height: 240px !important;
+    padding: 2rem 1.5rem 1.5rem 1.5rem !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+  }
+  .founder-media img {
+    max-width: 240px !important;
+    aspect-ratio: 1 / 1 !important;
   }
   .founder-content {
-    padding: 1.5rem 1.25rem !important;
+    padding: 1.75rem 1.5rem 2rem 1.5rem !important;
   }
 }
 
-/* 2. Professional Vision & Mission Cards (SVM) */
+/* 2. Modern Mission & Vision Cards (SVM) */
 .svm-section {
   background-color: var(--color-white) !important;
   border-top: 1px solid var(--color-border) !important;
@@ -4159,83 +4183,118 @@ body.header-is-revealed .products-nav-strip,
 
 .svm-grid {
   display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important;
-  gap: 1.75rem !important;
+  grid-template-columns: repeat(2, 1fr) !important; /* Balanced 2-card layout */
+  gap: 2rem !important;
+  max-width: 1040px !important;
+  margin: 0 auto !important;
   align-items: stretch !important;
 }
 
 .svm-card {
-  background-color: var(--color-light-bg) !important;
-  border: 1px solid var(--color-border) !important;
-  border-radius: var(--radius-xl) !important;
-  padding: 2rem 1.75rem !important;
-  box-shadow: var(--shadow-sm) !important;
+  background-color: #FFFFFF !important;
+  border: 1.5px solid rgba(226, 232, 240, 0.9) !important;
+  border-radius: 20px !important; /* Clean rounded corners */
+  padding: 2.25rem 2rem !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05) !important;
   display: flex !important;
   flex-direction: column !important;
-  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast) !important;
+  transition: transform var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal) !important;
   position: relative !important;
 }
 
 .svm-card:hover {
   transform: translateY(-4px) !important;
-  border-color: var(--color-accent-green) !important;
-  box-shadow: var(--shadow-md) !important;
-  background-color: var(--color-white) !important;
+  border-color: rgba(22, 163, 74, 0.35) !important;
+  box-shadow: 0 16px 32px -4px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(22, 163, 74, 0.15) !important;
 }
 
 .svm-card-header {
   display: flex !important;
   align-items: center !important;
-  justify-content: space-between !important;
+  justify-content: flex-start !important;
   margin-bottom: 1.25rem !important;
 }
 
 .svm-card-icon {
-  width: 48px !important;
-  height: 48px !important;
-  border-radius: var(--radius-md) !important;
-  background-color: var(--color-accent-green-subtle) !important;
-  color: var(--color-brand-green) !important;
-  display: flex !important;
+  width: 52px !important;
+  height: 52px !important;
+  border-radius: 14px !important;
+  background: rgba(34, 197, 94, 0.1) !important;
+  color: #16A34A !important;
+  border: 1px solid rgba(22, 163, 74, 0.2) !important;
+  display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
+  transition: transform 0.3s ease, background 0.3s ease !important;
+}
+
+.svm-card:hover .svm-card-icon {
+  transform: scale(1.06);
+  background: rgba(34, 197, 94, 0.16) !important;
 }
 
 .svm-card-icon svg {
-  width: 24px !important;
-  height: 24px !important;
-}
-
-.svm-tag {
-  font-size: 0.75rem !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
-  color: var(--color-brand-green) !important;
-  background: rgba(34, 197, 94, 0.12) !important;
-  padding: 0.25rem 0.6rem !important;
-  border-radius: var(--radius-full) !important;
+  width: 26px !important;
+  height: 26px !important;
 }
 
 .svm-card-title {
   font-family: var(--font-heading) !important;
-  font-size: 1.35rem !important;
+  font-size: 1.4rem !important;
   font-weight: 800 !important;
-  color: var(--color-deep-charcoal) !important;
+  color: #0F172A !important;
   margin-bottom: 0.75rem !important;
+  letter-spacing: -0.01em !important;
 }
 
 .svm-card-text {
-  font-size: 0.9375rem !important;
+  font-size: 0.95rem !important;
   line-height: 1.65 !important;
-  color: var(--color-secondary-text) !important;
-  margin: 0 !important;
+  color: #475569 !important;
+  margin: 0 0 1.25rem 0 !important;
+  flex-grow: 1 !important;
 }
 
-@media (max-width: 900px) {
+/* 3 Concise Structured Bullets for Mission & Vision */
+.svm-specs-list {
+  list-style: none !important;
+  padding: 1.15rem 0 0 0 !important;
+  margin: auto 0 0 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.65rem !important;
+  border-top: 1px solid #E2E8F0 !important;
+}
+
+.svm-specs-list li {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 0.6rem !important;
+  font-size: 0.88rem !important;
+  line-height: 1.45 !important;
+  color: #334155 !important;
+}
+
+.svm-specs-list li strong {
+  color: #0F172A !important;
+  font-weight: 600 !important;
+}
+
+.svm-specs-list .spec-check {
+  flex-shrink: 0 !important;
+  width: 17px !important;
+  height: 17px !important;
+  color: #16A34A !important;
+  margin-top: 2px !important;
+}
+
+@media (max-width: 860px) {
   .svm-grid {
     grid-template-columns: 1fr !important;
-    gap: 1.25rem !important;
+    gap: 1.5rem !important;
+  }
+  .svm-card {
+    padding: 1.75rem 1.5rem !important;
   }
 }
 
