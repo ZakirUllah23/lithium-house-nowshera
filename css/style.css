@@ -5069,3 +5069,71 @@ body.header-is-revealed .products-nav-strip,
     grid-template-columns: 1fr;
   }
 }
+
+/* ========================================================
+   Clean Product & Package Specifications Bullet List (Green Checkmarks)
+   ======================================================== */
+.product-specs-list,
+.package-specs-list {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0.85rem 0 1.25rem 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.5rem !important;
+  flex-grow: 1 !important;
+}
+
+.product-specs-list li,
+.package-specs-list li {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 0.5rem !important;
+  font-size: 0.85rem !important;
+  line-height: 1.45 !important;
+  color: #334155 !important;
+}
+
+.product-specs-list li strong,
+.package-specs-list li strong {
+  color: #0F172A !important;
+  font-weight: 600 !important;
+}
+
+.product-specs-list .spec-check,
+.package-specs-list .spec-check {
+  flex-shrink: 0 !important;
+  width: 17px !important;
+  height: 17px !important;
+  color: #16A34A !important; /* Brand green */
+  margin-top: 2px !important;
+}
+
+/* Dark Inverters Section Styling */
+.section-dark .product-specs-list li,
+.product-card[style*="background-color: #1F2937"] .product-specs-list li {
+  color: #CBD5E1 !important;
+}
+
+.section-dark .product-specs-list li strong,
+.product-card[style*="background-color: #1F2937"] .product-specs-list li strong {
+  color: #F8FAFC !important;
+}
+
+.section-dark .product-specs-list .spec-check,
+.product-card[style*="background-color: #1F2937"] .product-specs-list .spec-check {
+  color: #22C55E !important;
+}
+
+/* Equal Height & Balanced Spacing across Card Grids */
+.product-card-body,
+.package-card-content {
+  display: flex !important;
+  flex-direction: column !important;
+  flex-grow: 1 !important;
+}
+
+.product-card-footer,
+.package-card-footer {
+  margin-top: auto !important;
+}
